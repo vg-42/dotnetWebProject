@@ -1,0 +1,7 @@
+C:\VG\dotnetProject\dotnetcore\dotnetWebProject\bin\Release\net8.0\publish\dotnetWebProject.exe
+C:\VG\dotnetProject\dotnetcore\dotnetWebProject\bin\Release\net8.0\publish\appsettings.Development.json
+C:\VG\dotnetProject\dotnetcore\dotnetWebProject\bin\Release\net8.0\publish\appsettings.json
+C:\VG\dotnetProject\dotnetcore\dotnetWebProject\bin\Release\net8.0\publish\dotnetWebProject.dll
+C:\VG\dotnetProject\dotnetcore\dotnetWebProject\bin\Release\net8.0\publish\dotnetWebProject.deps.json
+C:\VG\dotnetProject\dotnetcore\dotnetWebProject\bin\Release\net8.0\publish\dotnetWebProject.runtimeconfig.json
+C:\VG\dotnetProject\dotnetcore\dotnetWebProject\bin\Release\net8.0\publish\dotnetWebProject.pdb
