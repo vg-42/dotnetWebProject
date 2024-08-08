@@ -12,17 +12,55 @@ on:
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: Self-Hosted
 
     steps:
-    - uses: actions/checkout@v4
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 8.0.x
-    - name: Restore dependencies
+
+    - name: Clean Dependencies
+      run: dotnet clean
+      working-directory: C:\VG\dotnetProject\runner\actions-runner\_work\dotnetWebProject\dotnetWebProject
+
+    - name: Restore Dependencies
       run: dotnet restore
-    - name: Build
-      run: dotnet build --no-restore
-    - name: Test
-      run: dotnet test --no-build --verbosity normal
+      working-directory: C:\VG\dotnetProject\runner\actions-runner\_work\dotnetWebProject\dotnetWebProject
+
+    - name: Build Solution
+      run: dotnet build --configuration Release
+      working-directory: C:\VG\dotnetProject\runner\actions-runner\_work\dotnetWebProject\dotnetWebProject
+
+    - name: Publish
+      run: dotnet publish --configuration Release --output publish
+      working-directory: C:\VG\dotnetProject\runner\actions-runner\_work\dotnetWebProject\dotnetWebProject
+
+    - name: Zip Publish Folder
+      if: ${{ success() }}
+      run: Compress-Archive -Path "C:\VG\dotnetProject\runner\actions-runner\_work\dotnetWebProject\dotnetWebProject\publish/*" -DestinationPath "C:\VG\dotnetProject\artifact.zip" -Force
+    
+    - name: Stop Specific IIS Website
+      run: |
+        $appPoolName = 'dotnetWeb'
+        Import-Module WebAdministration
+        Stop-WebAppPool -Name $appPoolName
+        PowerShell -Command "Stop-Website -Name 'dotnetWeb'"
+        Start-Sleep -Seconds 20
+
+    - name: Unzip Artifact
+      run: Expand-Archive -Path "C:\VG\dotnetProject\artifact.zip" -DestinationPath "C:\VG\dotnetProject\publish" -Force
+
+    - name: Start Specific IIS Website
+      run: |
+        Start-Sleep -Seconds 20
+        $appPoolName = 'dotnetWeb'
+        Import-Module WebAdministration
+        Start-WebAppPool -Name $appPoolName
+        PowerShell -Command "Start-Website -Name 'dotnetWeb'"
+
+
+
